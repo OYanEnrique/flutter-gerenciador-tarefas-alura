@@ -45,6 +45,8 @@ lib/
 │   ├── difficulty.dart          # Widget de dificuldade
 │   └── task.dart               # Widget de tarefa
 ├── data/                       # Camada de dados
+│   ├── database.dart           # Configuração do banco de dados SQLite
+│   ├── task_dao.dart           # Data Access Object para tarefas
 │   └── task_inherited.dart     # Gerenciamento de estado
 └── screens/                    # Telas do aplicativo
     ├── initial_screen.dart     # Tela inicial com lista de tarefas
@@ -95,6 +97,7 @@ Durante o desenvolvimento deste projeto, foram aplicados conceitos importantes:
 - **Navegação**: Implementação de navegação entre telas com Navigator
 - **Forms**: Criação e validação de formulários
 - **Persistência de Dados**: Uso do SQLite para armazenar dados localmente
+- **DAO Pattern**: Implementação do padrão Data Access Object para abstração do banco de dados
 - **InheritedWidget**: Gerenciamento de estado compartilhado entre widgets
 - **ListView**: Renderização eficiente de listas
 - **Assets**: Gerenciamento de imagens e recursos
