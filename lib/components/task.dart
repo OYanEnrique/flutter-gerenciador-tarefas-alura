@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nosso_primeiro_projeto/components/difficulty.dart';
+import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 
 
 class Task extends StatefulWidget {
   final String nome;
   final String foto;
   final int dificuldade;
-  int nivel;
+  final int nivel;
   Task(this.nome, this.foto, this.dificuldade, [this.nivel = 0, Key? key,])
       : super(key: key);
 
@@ -18,6 +19,13 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
+  late int nivelAtual;
+
+  @override
+  void initState() {
+    super.initState();
+    nivelAtual = widget.nivel;
+  }
 
   bool assetOrNetwork() {
     if (widget.foto.contains('http')) {
@@ -86,28 +94,76 @@ class _TaskState extends State<Task> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 52,
+                    Container(
+                      height: 100,
                       width: 52,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            print(widget.nivel);
-                            setState(() {
-                              widget.nivel++;
-                            });
-                            // print(nivel);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
-                              Icon(Icons.arrow_drop_up),
-                              Text(
-                                'UP',
-                                style: TextStyle(fontSize: 12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: 52,
+                            width: 52,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Deletar Tarefa'),
+                                    content: Text('Tem certeza que deseja deletar a tarefa "${widget.nome}"?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          TaskDao().delete(widget.nome);
+                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Tarefa "${widget.nome}" deletada!'),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Deletar', style: TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: const Icon(Icons.delete, size: 20),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 52,
+                            width: 52,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  nivelAtual++;
+                                });
+                                TaskDao().save(Task(widget.nome, widget.foto, widget.dificuldade, nivelAtual));
+                              },
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Icon(Icons.arrow_drop_up),
+                                  Text(
+                                    'UP',
+                                    style: TextStyle(fontSize: 12),
+                                  )
+                                ],
                               )
-                            ],
-                          )),
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -121,7 +177,7 @@ class _TaskState extends State<Task> {
                       child: LinearProgressIndicator(
                         color: Colors.white,
                         value: (widget.dificuldade > 0)
-                            ? (widget.nivel / widget.dificuldade) / 10
+                            ? (nivelAtual / widget.dificuldade) / 10
                             : 1,
                       ),
                       width: 200,
@@ -130,7 +186,7 @@ class _TaskState extends State<Task> {
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'Nivel: ${widget.nivel}',
+                      'Nivel: $nivelAtual',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   )
