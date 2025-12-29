@@ -19,8 +19,9 @@ Este aplicativo permite aos usuários criar, visualizar e gerenciar suas tarefas
 - 💪 Barra de progresso para acompanhar o desenvolvimento de cada tarefa
 - 💾 Persistência local de dados usando SQLite
 - 🔍 Buscar tarefas específicas no banco de dados
-- 📋 Listar todas as tarefas armazenadas
-
+- 📋 Listar todas as tarefas armazenadas- 💾 **Persistência de níveis**: Os níveis das tarefas são salvos automaticamente no banco
+- ❌ **Exclusão com confirmação**: Diálogo de confirmação antes de deletar tarefas
+- 🔄 **Atualização em tempo real**: Botão de refresh para recarregar a lista
 ## 🛠️ Tecnologias Utilizadas
 
 - **Flutter** - Framework de desenvolvimento mobile
@@ -102,6 +103,9 @@ Durante o desenvolvimento deste projeto, foram aplicados conceitos importantes:
 - **DAO Pattern**: Implementação do padrão Data Access Object para abstração do banco de dados
 - **Queries SQL**: Operações de busca e listagem no banco de dados
 - **Async/Await**: Programação assíncrona para operações de I/O
+- **AlertDialog**: Diálogos de confirmação para ações críticas
+- **Estado Local**: Gerenciamento de estado mutável com variáveis de estado
+- **Migração de Banco de Dados**: Criação de nova tabela para evitar conflitos
 - **InheritedWidget**: Gerenciamento de estado compartilhado entre widgets
 - **ListView**: Renderização eficiente de listas
 - **Assets**: Gerenciamento de imagens e recursos
@@ -113,8 +117,9 @@ Durante o desenvolvimento deste projeto, foram aplicados conceitos importantes:
 ## 🎯 Próximos Passos
 
 Possíveis melhorias futuras:
-- [ ] Implementar método save() para adicionar tarefas ao banco
-- [ ] Implementar método delete() para remover tarefas
+- [x] Implementar persistência de níveis no banco de dados
+- [x] Implementar método delete() para remover tarefas
+- [x] Adicionar confirmação ao deletar tarefas
 - [ ] Adicionar edição de tarefas
 - [ ] Implementar filtros e ordenação
 - [ ] Adicionar categorias para tarefas
