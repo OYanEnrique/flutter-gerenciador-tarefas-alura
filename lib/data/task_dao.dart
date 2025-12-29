@@ -1,4 +1,6 @@
 import 'package:nosso_primeiro_projeto/components/task.dart';
+import 'package:nosso_primeiro_projeto/data/database.dart';
+import 'package:sqflite/sqflite.dart';
 
 class TaskDao {
   static const String tableSql = 
@@ -14,8 +16,36 @@ class TaskDao {
 
   save(Task tarefa) async {}
   Future<List<Task>> findAll() async {
-    return [];
+    print('Acessando o findall');
+    final Database bancoDeDados = await getDatabase();
+    final List<Map<String, dynamic>> result = await bancoDeDados.query(_tablename);
+    print('Procurando dados no banco de dados...encontrado: $result');
+    return toList(result);
   }
-  Future<List<Task>> find(String nomeDaTarefa) async {}
+  List<Task> toList(List<Map<String, dynamic>> mapaDeTarefas){
+    print('Convertendo to List');
+    final List<Task> tarefas = [];
+    for (Map<String, dynamic> linha in mapaDeTarefas) {
+      final Task tarefa = Task(
+        linha[_name],
+        linha[_image],
+        linha[_difficulty],
+      );
+      tarefas.add(tarefa);
+    }
+    print('Lista de Tarefas: $tarefas');
+    return tarefas;
+  }
+  Future<List<Task>> find(String nomeDaTarefa) async {
+    print('Acessando o find');
+    final Database bancoDeDados = await getDatabase();
+    final List<Map<String, dynamic>> result = await bancoDeDados.query(
+      _tablename,
+      where: '$_name = ?',
+      whereArgs: [nomeDaTarefa],
+    );
+    print('Procurando dados no banco de dados...encontrado: ${toList(result)}');
+    return toList(result);
+  }
   delete(String nomeDaTarefa) async {}
 }
